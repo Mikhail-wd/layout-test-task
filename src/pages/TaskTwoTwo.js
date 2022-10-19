@@ -33,14 +33,15 @@ function TaskTwoTwo() {
         };
     };
 
-    function changeDirection (e) {     
+    function changeDirection (e) {   
         setDirection(e.target.value*1);
             switch(e.target.value*1){
                 case 1:
-                    setAtoB(1);
+                    reset ();
                     settoggleLabelOne("unhidden");                    
                 break;
-                case 2:                    
+                case 2:
+                    reset ()                    
                     settoggleLabelOne("unhidden");
                     break;
                 case 3:
@@ -50,8 +51,8 @@ function TaskTwoTwo() {
                 default:
                 break;    
             }
-        console.log(direction);
-        formatDirection()
+        formatDirection();
+        setTickets("hidden");
     }
 
     const tabletArrayAtoB = [
@@ -90,8 +91,7 @@ function TaskTwoTwo() {
 
     function changeResult (e) {
         setTicketsAmount(e.target.value);
-        setResult("hidden"); 
-        console.log(tickets)                 
+        setResult("hidden");               
     };
 
     function calculate () {
@@ -102,7 +102,6 @@ function TaskTwoTwo() {
         }
         else {
         formatDirection();
-        console.log(tickets);
         setResult("unhidden");
         }
     };
@@ -126,7 +125,7 @@ function TaskTwoTwo() {
             <div className="form">
                 <label for="time" className="labelOne">Выберите направленине</label>
                 <select name="route" className="labelOne" id="route" onChange={(e)=>changeDirection(e)}>
-                    <option defaultValue>Укажите места</option>
+                    <option disabled selected>Укажите места</option>
                     <option value="1">из A в B</option>
                     <option value="2">из B в A</option>
                     <option value="3">из A в B и обратно в А</option>
@@ -167,7 +166,7 @@ function TaskTwoTwo() {
                 <label className={"labelOne "+toggTickets} for="num">Количество билетов</label>
                 <input className={"labelOne "+toggTickets}  type="text" id="num" onChange={(e)=>changeResult(e)}/>
                 <br/>
-                <button className={tickets >= 0 ? "labelOne unhidden" :"labelOne hidden"}  onClick={calculate}>Посчитать</button>
+                <button className={tickets > 0 ? "labelOne unhidden" :"labelOne hidden"}  onClick={calculate}>Посчитать</button>
                 <br/>
                 <p className={"labelOne "+ toggResult}>Вы выбрали {tickets} билета по маршруту из {convertDirection},
                 стоимостью: {direction ===3 ? 1200*tickets : price*tickets}р.<br/>                
