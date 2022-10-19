@@ -2,11 +2,12 @@ import {useState} from 'react';
 
 function TaskTwoTwo() {
     
-    const [direction,setDirection]=useState();
+    
+    const [direction,setDirection]=useState(0);
     const [toggleLabelOne,settoggleLabelOne]=useState("hidden");
     const [toggTickets,setTickets]=useState("hidden");
     const [toggResult,setResult]=useState("hidden");
-    const [tickets,setTicketsAmount]=useState();
+    const [tickets,setTicketsAmount]=useState(0);
     const [price,setPrice]=useState(1000);
     const [convertDirection,setConvertDirection]=useState();
     const [AtoB,setAtoB]=useState(1);
@@ -32,27 +33,29 @@ function TaskTwoTwo() {
         };
     };
 
-    function changeDirection (e) {        
+    function changeDirection (e) {     
         setDirection(e.target.value*1);
             switch(e.target.value*1){
                 case 1:
-                    settoggleLabelOne("unhidden");
-                    
+                    setAtoB(1);
+                    settoggleLabelOne("unhidden");                    
                 break;
-                case 2:
+                case 2:                    
                     settoggleLabelOne("unhidden");
                     break;
                 case 3:
+                    reset ()
                     settoggleLabelOne("unhidden");
                     break;
                 default:
                 break;    
             }
-        formatDirection();        
+        console.log(direction);
+        formatDirection()
     }
 
     const tabletArrayAtoB = [
-        {id:1, time:"18:00", come:"18:50", allowToStart:4},
+        {id:1, time:"18:00", come:"18:50", allowToStart:3},
         {id:2, time:"18:30", come:"19:20", allowToStart:5},
         {id:3, time:"18:45", come:"19:35", allowToStart:6},
         {id:4, time:"19:00", come:"19:50", allowToStart:6},
@@ -86,39 +89,52 @@ function TaskTwoTwo() {
     };
 
     function changeResult (e) {
-        setTicketsAmount(e.target.value*1);
-        formatDirection();               
+        setTicketsAmount(e.target.value);
+        setResult("hidden"); 
+        console.log(tickets)                 
     };
 
     function calculate () {
+        if (tickets*1 <= 0 ){
+            setResult("hidden")
+        } else if (tickets === String){
+            setResult("hidden")
+        }
+        else {
         formatDirection();
+        console.log(tickets);
         setResult("unhidden");
+        }
     };
 
     function startPointAB(e){
-        setAtoB(e.target.value*1);
-        
+        setAtoB(e.target.value*1);        
     };
 
     function startPointBA(e){
         setBtoA(e.target.value*1);       
     };
+
+    function reset (){
+        setAtoB(1);
+        setBtoA(1);
+    }
     
 
     return (
         <div className="content-task">
             <div className="form">
                 <label for="time" className="labelOne">Выберите направленине</label>
-                <select name="route" className="labelOne" id="route" onClick={(e)=>changeDirection(e)}>
-                    <option onClick={changeTicketsVisibility} defaultValue>Укажите места</option>
+                <select name="route" className="labelOne" id="route" onChange={(e)=>changeDirection(e)}>
+                    <option defaultValue>Укажите места</option>
                     <option value="1">из A в B</option>
                     <option value="2">из B в A</option>
                     <option value="3">из A в B и обратно в А</option>
                 </select>
                 <label for="time" className={"labelOne " + toggleLabelOne}>Выберите время</label>
-                <br/>
-                <select name="time" className={direction === 1 || direction === 3 ? "labelOne " + toggleLabelOne : "labelOne hidden"} id="time" onClick={changeTicketsVisibility}>
-                    <option className={direction === 3 ? "labelOne " + toggleLabelOne : "hidden"} onClick={changeTicketsVisibility} defaultValue>Укажите время</option>
+                <br/>                
+                <select name="time" className={direction === 1 ? "labelOne " + toggleLabelOne : direction === 3 ? "labelOne " + toggleLabelOne : "labelOne hidden"} id="time" onClick={changeTicketsVisibility}>
+                    <option onClick={(e)=>startPointBA(e)} disabled selected>Укажите время</option>
                     <option onClick={(e)=>startPointAB(e)} value="1">18:00(из A в B)</option>
                     <option onClick={(e)=>startPointAB(e)} value="2">18:30(из A в B)</option>
                     <option onClick={(e)=>startPointAB(e)} value="3">18:45(из A в B)</option>
@@ -126,21 +142,32 @@ function TaskTwoTwo() {
                     <option onClick={(e)=>startPointAB(e)} value="5">19:15(из A в B)</option>
                     <option onClick={(e)=>startPointAB(e)} value="6">21:00(из A в B)</option>
                 </select>
-                <select name="time" className={direction === 2 || direction === 3 ? "labelOne " + toggleLabelOne : "labelOne hidden"} id="time" onClick={changeTicketsVisibility}>
-                    <option className={direction === 3 ? "labelOne " + toggleLabelOne : "hidden"} defaultValue >Укажите время</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[1].id ? "" : "hidden" } value="1">18:30(из B в A)</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[2].id ? "" : "hidden" } value="2">18:45(из B в A)</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[3].id ? "" : "hidden" } value="3">19:00(из B в A)</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[4].id ? "" : "hidden" } value="4">19:15(из B в A)</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[5].id ? "" : "hidden" } value="5">19:35(из B в A)</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[6].id ? "" : "hidden" } value="6">21:50(из B в A)</option>
-                    <option onClick={(e)=>startPointBA(e)} className={direction !== 3 ? "" : tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[7].id ? "" : "hidden" } value="7">21:55(из B в A)</option>
-                </select>
+                {direction === 3 ? 
+                <select className="labelOne" name="time"  id="time" onClick={changeTicketsVisibility}>
+                    <option onClick={(e)=>startPointBA(e)}  disabled selected>Укажите время</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[1].id ? "" : "hidden" } value="1">18:30(из B в A)</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[2].id ? "" : "hidden" } value="2">18:45(из B в A)</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[3].id ? "" : "hidden" } value="3">19:00(из B в A)</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[4].id ? "" : "hidden" } value="4">19:15(из B в A)</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[5].id ? "" : "hidden" } value="5">19:35(из B в A)</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[6].id ? "" : "hidden" } value="6">21:50(из B в A)</option>
+                    <option onClick={(e)=>startPointBA(e)} className={tabletArrayAtoB[AtoB].allowToStart <= tabletArrayBtoA[7].id ? "" : "hidden" } value="7">21:55(из B в A)</option>
+                </select> : direction === 2 ?
+                    <select className="labelOne" name="time"  id="time" onClick={changeTicketsVisibility}>
+                        <option onClick={(e)=>startPointBA(e)} disabled selected>Укажите время</option>
+                        <option onClick={(e)=>startPointBA(e)} value="1">18:30(из B в A)</option>
+                        <option onClick={(e)=>startPointBA(e)} value="2">18:45(из B в A)</option>
+                        <option onClick={(e)=>startPointBA(e)} value="3">19:00(из B в A)</option>
+                        <option onClick={(e)=>startPointBA(e)} value="4">19:15(из B в A)</option>
+                        <option onClick={(e)=>startPointBA(e)} value="5">19:35(из B в A)</option>
+                        <option onClick={(e)=>startPointBA(e)} value="6">21:50(из B в A)</option>
+                        <option onClick={(e)=>startPointBA(e)} value="7">21:55(из B в A)</option>
+                    </select> : ""}
                 <br/>
                 <label className={"labelOne "+toggTickets} for="num">Количество билетов</label>
-                <input className={"labelOne "+toggTickets} onChange={(e)=>changeResult(e)}  type="text" id="num" />
+                <input className={"labelOne "+toggTickets}  type="text" id="num" onChange={(e)=>changeResult(e)}/>
                 <br/>
-                <button className={"labelOne "+toggTickets}  onClick={calculate}>Посчитать</button>
+                <button className={tickets >= 0 ? "labelOne unhidden" :"labelOne hidden"}  onClick={calculate}>Посчитать</button>
                 <br/>
                 <p className={"labelOne "+ toggResult}>Вы выбрали {tickets} билета по маршруту из {convertDirection},
                 стоимостью: {direction ===3 ? 1200*tickets : price*tickets}р.<br/>                
