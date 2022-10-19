@@ -76,8 +76,8 @@ function TaskTwoTwo() {
         var newDate = new Date();
         var timeZone = (newDate.getTimezoneOffset()/60*-1)+hours;
         if(timeZone >= 24) {
-            return( (timeZone-24)+timeString[2]+timeString[3]+timeString[4] );
-        } else {return timeString};
+            return ((timeZone-24)+timeString[2]+timeString[3]+timeString[4]);
+        } else {return (timeZone+timeString[2]+timeString[3]+timeString[4])};
     }
 
     function changeTicketsVisibility () {
