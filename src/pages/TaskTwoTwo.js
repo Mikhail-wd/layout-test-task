@@ -71,7 +71,14 @@ function TaskTwoTwo() {
         {id:8, time:"21:55", come:"22:45", allowToStart:false}
     ];
 
-    
+    function convertTimezone(timeString){        
+        var hours = (timeString[0]+timeString[1])*1;
+        var newDate = new Date();
+        var timeZone = (newDate.getTimezoneOffset()/60*-1)+hours;
+        if(timeZone >= 24) {
+            return( (timeZone-24)+timeString[2]+timeString[3]+timeString[4] );
+        } else {return timeString};
+    }
 
     function changeTicketsVisibility () {
         setTickets("unhidden");
@@ -138,8 +145,8 @@ function TaskTwoTwo() {
                 <p className={"labelOne "+ toggResult}>Вы выбрали {tickets} билета по маршруту из {convertDirection},
                 стоимостью: {direction ===3 ? 1200*tickets : price*tickets}р.<br/>                
                 Это путешествие займет у вас {direction !== 3 ? "50" : "1 час и 40"} минут.<br/>  
-                Теплоход отправляется в {direction === 1 ? tabletArrayAtoB[AtoB-1].time : direction === 2 ? tabletArrayBtoA[BtoA-1].time : direction === 3 ? tabletArrayAtoB[AtoB-1].time : "oops"},
-                 а прибудет в {direction === 1 ? tabletArrayAtoB[AtoB-1].come : direction === 2 ? tabletArrayBtoA[BtoA-1].come : direction === 3 ? tabletArrayBtoA[BtoA-1].come : "oops"}.
+                Теплоход отправляется в {direction === 1 ? convertTimezone(tabletArrayAtoB[AtoB-1].time) : direction === 2 ? convertTimezone(tabletArrayBtoA[BtoA-1].time) : direction === 3 ? convertTimezone(tabletArrayAtoB[AtoB-1].time) : "oops"},
+                 а прибудет в {direction === 1 ? convertTimezone(tabletArrayAtoB[AtoB-1].come) : direction === 2 ? convertTimezone(tabletArrayBtoA[BtoA-1].come) : direction === 3 ? convertTimezone(tabletArrayBtoA[BtoA-1].come) : "oops"}.
                 </p>
             </div>
         </div>
